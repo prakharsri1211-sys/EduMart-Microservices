@@ -1,0 +1,44 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      # Dynamic service discovery allows us to use service names (lb://)
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        - id: auth-service
+          uri: lb://AUTH-SERVICE
+          predicates:
+            - Path=/api/auth/**
+        - id: student-service
+          uri: lb://STUDENT-SERVICE
+          predicates:
+            - Path=/api/student/**
+
+# Eureka Configuration - Pointing to your Discovery Server
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
+
+# Management Configuration - Unlocks the Actuator API
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,info,gateway,routes"
+  endpoint:
+    gateway:
+      enabled: true
+    health:
+      show-details: always
