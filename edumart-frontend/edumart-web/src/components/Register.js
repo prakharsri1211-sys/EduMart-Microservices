@@ -1,36 +1,35 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
-import { LogIn, Lock, User, ChevronRight } from 'lucide-react';
+import { UserPlus, Lock, User, ChevronRight } from 'lucide-react';
 
-const Login = () => {
+const Register = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [role, setRole] = useState('STUDENT');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
-    const handleLogin = async (e) => {
-        if (e) e.preventDefault();
+    const handleRegister = async (e) => {
+        e.preventDefault();
         setIsLoading(true);
         setError('');
         
         try {
-            // Talking to API-GATEWAY on Port 8080
-            const response = await axios.post(
-                "http://localhost:8080/api/auth/login", 
-                { username, password }, 
+            // Note: Update endpoint if the Auth service handles registration differently
+            await axios.post(
+                "http://localhost:8080/api/auth/register",
+                { username, password, role },
                 { headers: { "Content-Type": "application/json" } }
             );
 
-            // Storing the JWT token from response
-            localStorage.setItem("token", response.data);
-            
-            // Redirect to the Dashboard
-            navigate("/dashboard"); 
+            // Redirect to login after successful registration
+            alert("Registration successful! Please login.");
+            navigate("/");
         } catch (err) {
             console.error(err);
-            setError("Login Failed! Please check your credentials or if Auth-Service is running.");
+            setError("Registration failed. Please try again.");
         } finally {
             setIsLoading(false);
         }
@@ -41,10 +40,10 @@ const Login = () => {
             <div className="max-w-md w-full bg-slate-800/50 backdrop-blur-xl p-8 rounded-2xl shadow-2xl border border-slate-700/50 transform transition-all">
                 <div className="text-center mb-8">
                     <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-indigo-500/20 text-indigo-400 mb-4">
-                        <LogIn size={32} />
+                        <UserPlus size={32} />
                     </div>
-                    <h2 className="text-3xl font-bold text-white tracking-tight">Welcome Back</h2>
-                    <p className="text-slate-400 mt-2">Sign in to your EduMart account</p>
+                    <h2 className="text-3xl font-bold text-white tracking-tight">Create Account</h2>
+                    <p className="text-slate-400 mt-2">Join EduMart today</p>
                 </div>
 
                 {error && (
@@ -53,7 +52,7 @@ const Login = () => {
                     </div>
                 )}
 
-                <form onSubmit={handleLogin} className="space-y-6">
+                <form onSubmit={handleRegister} className="space-y-6">
                     <div className="space-y-2">
                         <label className="text-sm font-medium text-slate-300 ml-1">Username</label>
                         <div className="relative">
@@ -82,10 +81,23 @@ const Login = () => {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 className="block w-full pl-11 pr-4 py-3 bg-slate-900/50 border border-slate-700 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-white placeholder-slate-500 transition-colors"
-                                placeholder="Enter your password"
+                                placeholder="Create a password"
                                 required
                             />
                         </div>
+                    </div>
+
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium text-slate-300 ml-1">I am a...</label>
+                        <select
+                            value={role}
+                            onChange={(e) => setRole(e.target.value)}
+                            className="block w-full px-4 py-3 bg-slate-900/50 border border-slate-700 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-white transition-colors"
+                        >
+                            <option value="STUDENT">Student</option>
+                            <option value="INSTRUCTOR">Instructor</option>
+                            <option value="ADMIN">Administrator</option>
+                        </select>
                     </div>
 
                     <button
@@ -93,15 +105,15 @@ const Login = () => {
                         disabled={isLoading}
                         className="w-full flex items-center justify-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900 focus:ring-indigo-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed group"
                     >
-                        {isLoading ? 'Signing in...' : 'Sign In'}
+                        {isLoading ? 'Creating account...' : 'Create Account'}
                         {!isLoading && <ChevronRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />}
                     </button>
                 </form>
 
                 <div className="mt-8 text-center text-sm text-slate-400">
-                    Don't have an account?{' '}
-                    <Link to="/register" className="font-medium text-indigo-400 hover:text-indigo-300 transition-colors">
-                        Register now
+                    Already have an account?{' '}
+                    <Link to="/" className="font-medium text-indigo-400 hover:text-indigo-300 transition-colors">
+                        Sign in instead
                     </Link>
                 </div>
             </div>
@@ -109,4 +121,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default Register;
