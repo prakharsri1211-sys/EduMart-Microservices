@@ -1,0 +1,81 @@
+services:
+  # 1. Discovery Server (Must start first ideally)
+  - type: web
+    name: edumart-discovery-server
+    env: docker
+    dockerContext: ./edumart-backend/EduMart-DiscoveryServer
+    dockerfilePath: ./Dockerfile
+    plan: free
+    healthCheckPath: /actuator/health
+
+  # 2. API Gateway
+  - type: web
+    name: edumart-gateway
+    env: docker
+    dockerContext: ./edumart-backend/EduMart-Gateway
+    dockerfilePath: ./Dockerfile
+    plan: free
+    healthCheckPath: /actuator/health
+    envVars:
+      # In Render, web services on the same account can talk via their internal or external hostnames.
+      - key: EUREKA_URI
+        value: https://edumart-discovery-server.onrender.com/eureka/
+      - key: EUREKA_INSTANCE_HOSTNAME
+        value: edumart-gateway.onrender.com
+
+  # 3. Auth Service
+  - type: web
+    name: edumart-auth-service
+    env: docker
+    dockerContext: ./edumart-backend/EduMart-AuthService
+    dockerfilePath: ./Dockerfile
+    plan: free
+    healthCheckPath: /actuator/health
+    envVars:
+      - key: EUREKA_URI
+        value: https://edumart-discovery-server.onrender.com/eureka/
+      - key: EUREKA_INSTANCE_HOSTNAME
+        value: edumart-auth-service.onrender.com
+      # The actual values for these will be set securely in the Render Dashboard (Supabase / MongoDB Atlas)
+      - key: SPRING_DATASOURCE_URL
+        sync: false
+      - key: SPRING_DATASOURCE_USERNAME
+        sync: false
+      - key: SPRING_DATASOURCE_PASSWORD
+        sync: false
+      - key: SPRING_DATA_MONGODB_URI
+        sync: false
+
+  # 4. Student Service
+  - type: web
+    name: edumart-student-service
+    env: docker
+    dockerContext: ./edumart-backend/EduMart-Student-Service
+    dockerfilePath: ./Dockerfile
+    plan: free
+    healthCheckPath: /actuator/health
+    envVars:
+      - key: EUREKA_URI
+        value: https://edumart-discovery-server.onrender.com/eureka/
+      - key: EUREKA_INSTANCE_HOSTNAME
+        value: edumart-student-service.onrender.com
+      - key: SPRING_DATASOURCE_URL
+        sync: false
+      - key: SPRING_DATASOURCE_USERNAME
+        sync: false
+      - key: SPRING_DATASOURCE_PASSWORD
+        sync: false
+      - key: SPRING_DATA_MONGODB_URI
+        sync: false
+
+  # 5. React Frontend
+  - type: web
+    name: edumart-web-frontend
+    env: static
+    # Render builds Node apps natively, no Docker required for static sites!
+    buildCommand: cd edumart-frontend/edumart-web && npm install && npm run build
+    staticPublishPath: ./edumart-frontend/edumart-web/build
+    plan: free
+    envVars:
+      - key: NODE_VERSION
+        value: 18.x
