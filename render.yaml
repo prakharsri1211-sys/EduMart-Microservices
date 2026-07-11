@@ -4,7 +4,7 @@ services:
     name: edumart-discovery-server
     env: docker
     dockerContext: ./edumart-backend/EduMart-DiscoveryServer
-    dockerfilePath: ./Dockerfile
+    dockerfilePath: ./edumart-backend/EduMart-DiscoveryServer/Dockerfile
     plan: free
     healthCheckPath: /actuator/health
 
@@ -13,7 +13,7 @@ services:
     name: edumart-gateway
     env: docker
     dockerContext: ./edumart-backend/EduMart-Gateway
-    dockerfilePath: ./Dockerfile
+    dockerfilePath: ./edumart-backend/EduMart-Gateway/Dockerfile
     plan: free
     healthCheckPath: /actuator/health
     envVars:
@@ -28,7 +28,7 @@ services:
     name: edumart-auth-service
     env: docker
     dockerContext: ./edumart-backend/EduMart-AuthService
-    dockerfilePath: ./Dockerfile
+    dockerfilePath: ./edumart-backend/EduMart-AuthService/Dockerfile
     plan: free
     healthCheckPath: /actuator/health
     envVars:
@@ -51,7 +51,7 @@ services:
     name: edumart-student-service
     env: docker
     dockerContext: ./edumart-backend/EduMart-Student-Service
-    dockerfilePath: ./Dockerfile
+    dockerfilePath: ./edumart-backend/EduMart-Student-Service/Dockerfile
     plan: free
     healthCheckPath: /actuator/health
     envVars:
