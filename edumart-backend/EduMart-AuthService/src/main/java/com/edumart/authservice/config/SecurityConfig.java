@@ -33,7 +33,7 @@ public class SecurityConfig {
 
 				// 5. Configure Request Permissions
             .authorizeHttpRequests(auth -> auth
-						.requestMatchers("/api/auth/**", "/error").permitAll() // Added /error for better debugging
+						.requestMatchers("/api/auth/**", "/error", "/actuator/**").permitAll() // Added /error and /actuator/** for Render health checks
                 .anyRequest().authenticated()
 				).build();
     }
