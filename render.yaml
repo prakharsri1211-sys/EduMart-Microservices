@@ -23,7 +23,7 @@ services:
       - key: EUREKA_URI
         value: https://edumart-discovery-server.onrender.com/eureka/
       - key: EUREKA_INSTANCE_HOSTNAME
-        value: edumart-gateway.onrender.com
+        value: edumart-gateway
       - key: PORT
         value: 8080
 
@@ -39,7 +39,7 @@ services:
       - key: EUREKA_URI
         value: https://edumart-discovery-server.onrender.com/eureka/
       - key: EUREKA_INSTANCE_HOSTNAME
-        value: edumart-auth-service.onrender.com
+        value: edumart-auth-service
       # The actual values for these will be set securely in the Render Dashboard (Supabase / MongoDB Atlas)
       - key: SPRING_DATASOURCE_URL
         value: jdbc:postgresql://aws-1-us-west-2.pooler.supabase.com:5432/postgres?sslmode=require
@@ -64,7 +64,7 @@ services:
       - key: EUREKA_URI
         value: https://edumart-discovery-server.onrender.com/eureka/
       - key: EUREKA_INSTANCE_HOSTNAME
-        value: edumart-student-service.onrender.com
+        value: edumart-student-service
       - key: SPRING_DATASOURCE_URL
         value: jdbc:postgresql://aws-1-us-west-2.pooler.supabase.com:5432/postgres?sslmode=require
       - key: SPRING_DATASOURCE_USERNAME
