@@ -28,7 +28,7 @@ public class SecurityConfig {
 	public CorsWebFilter corsWebFilter() {
 		CorsConfiguration config = new CorsConfiguration();
 		config.setAllowCredentials(true);
-		config.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+		config.setAllowedOrigins(Arrays.asList("http://localhost:3000", "https://edumart-web-frontend.onrender.com"));
 		config.setAllowedHeaders(Arrays.asList("*"));
 		config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 
