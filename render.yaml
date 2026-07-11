@@ -42,13 +42,13 @@ services:
         value: edumart-auth-service.onrender.com
       # The actual values for these will be set securely in the Render Dashboard (Supabase / MongoDB Atlas)
       - key: SPRING_DATASOURCE_URL
-        sync: false
+        value: jdbc:postgresql://aws-1-us-west-2.pooler.supabase.com:5432/postgres?sslmode=require
       - key: SPRING_DATASOURCE_USERNAME
-        sync: false
+        value: postgres.lcbsxoocyzpcnjyobqlz
       - key: SPRING_DATASOURCE_PASSWORD
-        sync: false
+        value: Ji0VcQZREFP4dphg
       - key: SPRING_DATA_MONGODB_URI
-        sync: false
+        value: mongodb+srv://prakharsri121198_db_user:Q1sF2xnQL2iHUE2X@edumart.aejozui.mongodb.net/edumart_student_db?appName=EDUMART
       - key: PORT
         value: 8081
 
@@ -66,13 +66,13 @@ services:
       - key: EUREKA_INSTANCE_HOSTNAME
         value: edumart-student-service.onrender.com
       - key: SPRING_DATASOURCE_URL
-        sync: false
+        value: jdbc:postgresql://aws-1-us-west-2.pooler.supabase.com:5432/postgres?sslmode=require
       - key: SPRING_DATASOURCE_USERNAME
-        sync: false
+        value: postgres.lcbsxoocyzpcnjyobqlz
       - key: SPRING_DATASOURCE_PASSWORD
-        sync: false
+        value: Ji0VcQZREFP4dphg
       - key: SPRING_DATA_MONGODB_URI
-        sync: false
+        value: mongodb+srv://prakharsri121198_db_user:Q1sF2xnQL2iHUE2X@edumart.aejozui.mongodb.net/edumart_student_db?appName=EDUMART
       - key: PORT
         value: 8082
 
