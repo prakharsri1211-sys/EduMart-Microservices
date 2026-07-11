@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
-import { UserPlus, Lock, User, ChevronRight } from 'lucide-react';
+import { UserPlus, Lock, User, ChevronRight, Eye, EyeOff } from 'lucide-react';
 
 const Register = () => {
     const [username, setUsername] = useState('');
@@ -9,7 +9,10 @@ const Register = () => {
     const [role, setRole] = useState('STUDENT');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
+
+    const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8080";
 
     const handleRegister = async (e) => {
         e.preventDefault();
@@ -19,7 +22,7 @@ const Register = () => {
         try {
             // Note: Update endpoint if the Auth service handles registration differently
             await axios.post(
-                "http://localhost:8080/api/auth/register",
+                `${API_URL}/api/auth/register`,
                 { username, password, role },
                 { headers: { "Content-Type": "application/json" } }
             );
@@ -77,13 +80,20 @@ const Register = () => {
                                 <Lock className="h-5 w-5 text-slate-500" />
                             </div>
                             <input
-                                type="password"
+                                type={showPassword ? "text" : "password"}
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="block w-full pl-11 pr-4 py-3 bg-slate-900/50 border border-slate-700 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-white placeholder-slate-500 transition-colors"
+                                className="block w-full pl-11 pr-12 py-3 bg-slate-900/50 border border-slate-700 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-white placeholder-slate-500 transition-colors"
                                 placeholder="Create a password"
                                 required
                             />
+                            <button
+                                type="button"
+                                onClick={() => setShowPassword(!showPassword)}
+                                className="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-500 hover:text-indigo-400 transition-colors"
+                            >
+                                {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                            </button>
                         </div>
                     </div>
 

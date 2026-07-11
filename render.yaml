@@ -86,3 +86,5 @@ services:
     envVars:
       - key: NODE_VERSION
         value: 18.x
+      - key: REACT_APP_API_URL
+        value: https://edumart-gateway.onrender.com
