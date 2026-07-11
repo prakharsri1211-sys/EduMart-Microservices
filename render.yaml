@@ -6,7 +6,9 @@ services:
     dockerContext: ./edumart-backend/EduMart-DiscoveryServer
     dockerfilePath: ./edumart-backend/EduMart-DiscoveryServer/Dockerfile
     plan: free
-    healthCheckPath: /actuator/health
+    envVars:
+      - key: PORT
+        value: 8761
 
   # 2. API Gateway
   - type: web
@@ -22,6 +24,8 @@ services:
         value: https://edumart-discovery-server.onrender.com/eureka/
       - key: EUREKA_INSTANCE_HOSTNAME
         value: edumart-gateway.onrender.com
+      - key: PORT
+        value: 8080
 
   # 3. Auth Service
   - type: web
@@ -45,6 +49,8 @@ services:
         sync: false
       - key: SPRING_DATA_MONGODB_URI
         sync: false
+      - key: PORT
+        value: 8081
 
   # 4. Student Service
   - type: web
@@ -67,6 +73,8 @@ services:
         sync: false
       - key: SPRING_DATA_MONGODB_URI
         sync: false
+      - key: PORT
+        value: 8082
 
   # 5. React Frontend
   - type: web
