@@ -75,7 +75,6 @@ services:
     # Render builds Node apps natively, no Docker required for static sites!
     buildCommand: cd edumart-frontend/edumart-web && npm install && npm run build
     staticPublishPath: ./edumart-frontend/edumart-web/build
-    plan: free
     envVars:
       - key: NODE_VERSION
         value: 18.x
