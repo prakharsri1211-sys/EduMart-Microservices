@@ -13,11 +13,11 @@ spring:
           lower-case-service-id: true
       routes:
         - id: auth-service
-          uri: lb://AUTH-SERVICE
+          uri: ${AUTH_SERVICE_URL:https://edumart-auth-service.onrender.com}
           predicates:
             - Path=/api/auth/**
         - id: student-service
-          uri: lb://STUDENT-SERVICE
+          uri: ${STUDENT_SERVICE_URL:https://edumart-student-service.onrender.com}
           predicates:
             - Path=/api/student/**
 
