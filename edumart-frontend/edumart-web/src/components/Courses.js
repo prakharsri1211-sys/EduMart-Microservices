@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { BookOpen, PlusCircle } from 'lucide-react';
 import { jwtDecode } from 'jwt-decode';
+import { useNavigate } from 'react-router-dom';
 
 const Courses = () => {
     const [userRole, setUserRole] = useState('STUDENT');
+    const navigate = useNavigate();
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -18,7 +20,7 @@ const Courses = () => {
     }, []);
 
     const handleCreateCourse = () => {
-        alert("This will open a 'Create Course' modal or navigate to a new form page!");
+        navigate('/courses/new');
     };
 
     const isStudent = userRole === 'STUDENT';
