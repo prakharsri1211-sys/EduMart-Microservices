@@ -9,6 +9,7 @@ const Register = () => {
     const [role, setRole] = useState('STUDENT');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
 
@@ -18,6 +19,7 @@ const Register = () => {
         e.preventDefault();
         setIsLoading(true);
         setError('');
+        setSuccess('');
         
         try {
             // Note: Update endpoint if the Auth service handles registration differently
@@ -27,9 +29,11 @@ const Register = () => {
                 { headers: { "Content-Type": "application/json" } }
             );
 
-            // Redirect to login after successful registration
-            alert("Registration successful! Please login.");
-            navigate("/");
+            // Show inline success message and delay redirect
+            setSuccess("Registration successful! Redirecting to login...");
+            setTimeout(() => {
+                navigate("/");
+            }, 2000);
         } catch (err) {
             console.error(err);
             setError("Registration failed. Please try again.");
@@ -52,6 +56,12 @@ const Register = () => {
                 {error && (
                     <div className="mb-6 p-4 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm text-center">
                         {error}
+                    </div>
+                )}
+
+                {success && (
+                    <div className="mb-6 p-4 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm text-center">
+                        {success}
                     </div>
                 )}
 
