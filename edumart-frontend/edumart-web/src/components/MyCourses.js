@@ -1,5 +1,6 @@
 import React from 'react';
 import { GraduationCap } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const MyCourses = () => {
     return (
@@ -17,9 +18,9 @@ const MyCourses = () => {
                 <p className="text-slate-400 mt-2 text-center max-w-md">
                     You haven't enrolled in any courses yet. Browse the catalog to start learning.
                 </p>
-                <button className="mt-6 py-2 px-6 bg-indigo-600 hover:bg-indigo-500 text-white font-medium rounded-xl transition-colors">
+                <Link to="/courses" className="mt-6 py-2 px-6 bg-indigo-600 hover:bg-indigo-500 text-white font-medium rounded-xl transition-colors">
                     Browse Courses
-                </button>
+                </Link>
             </div>
         </div>
     );
