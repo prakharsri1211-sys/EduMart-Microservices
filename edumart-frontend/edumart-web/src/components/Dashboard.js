@@ -54,25 +54,25 @@ const Dashboard = () => {
 
             {userRole === 'ADMIN' && (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <StatCard title="Total Students" value="12,345" icon={Users} trend="+12%" />
-                    <StatCard title="Active Courses" value="142" icon={BookOpen} trend="+5%" />
-                    <StatCard title="Platform Revenue" value="$45,231" icon={DollarSign} trend="+18%" />
-                    <StatCard title="Avg Completion" value="68%" icon={TrendingUp} trend="+2%" />
+                    <StatCard title="Total Students" value="0" icon={Users} />
+                    <StatCard title="Active Courses" value="0" icon={BookOpen} />
+                    <StatCard title="Platform Revenue" value="$0" icon={DollarSign} />
+                    <StatCard title="Avg Completion" value="0%" icon={TrendingUp} />
                 </div>
             )}
 
             {userRole === 'INSTRUCTOR' && (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <StatCard title="My Students" value="1,245" icon={Users} trend="+8%" />
-                    <StatCard title="Published Courses" value="12" icon={BookOpen} />
-                    <StatCard title="Earnings" value="$4,521" icon={DollarSign} trend="+15%" />
+                    <StatCard title="My Students" value="0" icon={Users} />
+                    <StatCard title="Published Courses" value="0" icon={BookOpen} />
+                    <StatCard title="Earnings" value="$0" icon={DollarSign} />
                 </div>
             )}
 
             {userRole === 'STUDENT' && (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <StatCard title="Enrolled Courses" value="4" icon={BookOpen} />
-                    <StatCard title="Overall Progress" value="42%" icon={TrendingUp} trend="+5%" />
+                    <StatCard title="Enrolled Courses" value="0" icon={BookOpen} />
+                    <StatCard title="Overall Progress" value="0%" icon={TrendingUp} />
                 </div>
             )}
 
