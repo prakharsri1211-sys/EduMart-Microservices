@@ -34,14 +34,19 @@ public class JwtUtil {
 
 	// ===================== TOKEN GENERATION =====================
 
-	public String generateToken(String username, String role) {
-
+	public String generateAccessToken(String username, String role) {
 		Map<String, Object> claims = new HashMap<>();
-
 		claims.put("role", role);
 
 		return Jwts.builder().claims(claims).subject(username).issuedAt(new Date(System.currentTimeMillis()))
-				.expiration(new Date(System.currentTimeMillis() + expirationTime)).signWith(getSignKey()).compact();
+				.expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 15)) // 15 minutes
+				.signWith(getSignKey()).compact();
+	}
+
+	public String generateRefreshToken(String username) {
+		return Jwts.builder().subject(username).issuedAt(new Date(System.currentTimeMillis()))
+				.expiration(new Date(System.currentTimeMillis() + 1000L * 60 * 60 * 24 * 7)) // 7 days
+				.signWith(getSignKey()).compact();
 	}
 
 	// ===================== VALIDATION =====================

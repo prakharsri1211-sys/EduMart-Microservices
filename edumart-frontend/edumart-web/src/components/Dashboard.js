@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { jwtDecode } from 'jwt-decode';
 import { BookOpen, Users, TrendingUp, DollarSign } from 'lucide-react';
 import axios from 'axios';
 
@@ -8,25 +7,20 @@ const Dashboard = () => {
     const [studentData, setStudentData] = useState(null);
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            try {
-                const decoded = jwtDecode(token);
-                setUserRole(decoded.role || decoded.authorities || 'STUDENT');
-            } catch (e) {
-                console.error("Token decode error", e);
-            }
+        // Read role from localStorage (the actual JWT is in an HttpOnly cookie)
+        const role = localStorage.getItem('userRole');
+        if (role) {
+            setUserRole(role);
         }
         
         // Example: Fetching dynamic data from Student Service through Gateway
-        if (userRole === 'STUDENT' && token) {
-            axios.get("http://localhost:8080/api/student/details", {
-                headers: { Authorization: `Bearer ${token}` }
-            })
+        // Cookies are sent automatically because we set withCredentials: true globally
+        if (role === 'STUDENT') {
+            axios.get("http://localhost:8080/api/student/details")
             .then(res => setStudentData(res.data))
             .catch(err => console.error("Failed to fetch student details", err));
         }
-    }, [userRole]);
+    }, []);
 
     const StatCard = ({ title, value, icon: Icon, trend }) => (
         <div className="bg-slate-800/50 backdrop-blur-md p-6 rounded-2xl border border-slate-700/50 hover:border-indigo-500/50 transition-colors group">

@@ -26,8 +26,9 @@ const Login = () => {
                 { headers: { "Content-Type": "application/json" } }
             );
 
-            // Storing the JWT token from response
-            localStorage.setItem("token", response.data);
+            // The JWT is now securely stored in an HttpOnly cookie set by the backend!
+            // We only need to store the non-sensitive role for UI rendering.
+            localStorage.setItem("userRole", response.data.role);
             
             // Redirect to the Dashboard
             navigate("/dashboard"); 

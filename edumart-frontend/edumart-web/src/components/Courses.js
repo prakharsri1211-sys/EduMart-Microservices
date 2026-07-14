@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { BookOpen, PlusCircle } from 'lucide-react';
-import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
 
 const Courses = () => {
@@ -8,14 +7,9 @@ const Courses = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            try {
-                const decoded = jwtDecode(token);
-                setUserRole(decoded.role || decoded.authorities || 'STUDENT');
-            } catch (e) {
-                console.error("Token decode error", e);
-            }
+        const role = localStorage.getItem('userRole');
+        if (role) {
+            setUserRole(role);
         }
     }, []);
 

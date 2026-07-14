@@ -36,23 +36,50 @@ public class AuthService {
 	}
 
 	/**
-	 * LOGIN: Validates credentials and returns a JWT.
+	 * LOGIN: Validates credentials and returns tokens and user info.
 	 */
-	public String login(String username, String password) {
-		// 1. Fetch user or throw error (Triggers the 500 error you saw if user doesn't
-		// exist)
+	public java.util.Map<String, String> login(String username, String password) {
 		User user = repository.findByUsername(username)
 				.orElseThrow(() -> new RuntimeException("Invalid username or password"));
 
-		// 2. BCrypt Verification
-		// Matches the plain text 'password' against the stored hash
 		if (!passwordEncoder.matches(password, user.getPassword())) {
 			throw new RuntimeException("Invalid username or password");
 		}
 
-		// 3. Generate Token
-		// Ensure your JwtUtil uses 'user.getUsername()' as the Subject
-		return jwtUtil.generateToken(user.getUsername(), user.getRole());
+		String accessToken = jwtUtil.generateAccessToken(user.getUsername(), user.getRole());
+		String refreshToken = jwtUtil.generateRefreshToken(user.getUsername());
+		
+		java.util.Map<String, String> response = new java.util.HashMap<>();
+		response.put("accessToken", accessToken);
+		response.put("refreshToken", refreshToken);
+		response.put("username", user.getUsername());
+		response.put("role", user.getRole());
+		
+		return response;
+	}
+
+	/**
+	 * REFRESH: Validates refresh token and returns a new access token map.
+	 */
+	public java.util.Map<String, String> refresh(String refreshToken) {
+		try {
+			jwtUtil.validateToken(refreshToken);
+			String username = jwtUtil.extractUsername(refreshToken);
+			
+			User user = repository.findByUsername(username)
+					.orElseThrow(() -> new RuntimeException("User not found"));
+					
+			String newAccessToken = jwtUtil.generateAccessToken(user.getUsername(), user.getRole());
+			
+			java.util.Map<String, String> response = new java.util.HashMap<>();
+			response.put("accessToken", newAccessToken);
+			response.put("username", user.getUsername());
+			response.put("role", user.getRole());
+			
+			return response;
+		} catch (Exception e) {
+			throw new RuntimeException("Invalid refresh token");
+		}
 	}
 
 	/**

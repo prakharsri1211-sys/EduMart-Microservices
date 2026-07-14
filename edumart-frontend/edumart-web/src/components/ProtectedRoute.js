@@ -1,29 +1,26 @@
 import React from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
-import { jwtDecode } from 'jwt-decode';
 
 const ProtectedRoute = ({ allowedRoles }) => {
-    const token = localStorage.getItem('token');
+    // We no longer have a token in localStorage, only the userRole.
+    // The actual token is in an HttpOnly cookie and managed by the browser.
+    const userRole = localStorage.getItem('userRole');
 
-    if (!token) {
-        // If not logged in, redirect to login page
+    if (!userRole) {
+        // If no role is found, assume not logged in and redirect to login page
         return <Navigate to="/" replace />;
     }
 
     try {
-        const decoded = jwtDecode(token);
-        const userRole = decoded.role || decoded.authorities; // Adjust based on exact JWT structure
-
-        // Note: For now, if allowedRoles isn't provided, just require a valid token
+        // If allowedRoles is provided, check if the current userRole is allowed
         if (allowedRoles && !allowedRoles.includes(userRole)) {
-            // Alternatively, redirect to an unauthorized page or dashboard
             return <Navigate to="/dashboard" replace />;
         }
 
         return <Outlet />;
     } catch (error) {
-        console.error("Invalid token:", error);
-        localStorage.removeItem('token');
+        console.error("Route error:", error);
+        localStorage.removeItem('userRole');
         return <Navigate to="/" replace />;
     }
 };

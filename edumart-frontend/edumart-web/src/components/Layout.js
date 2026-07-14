@@ -12,27 +12,23 @@ import {
     GraduationCap,
     Users
 } from 'lucide-react';
-import { jwtDecode } from 'jwt-decode';
+import axios from 'axios';
 
 const Layout = ({ children }) => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
 
-    // Decode token to get role
-    const token = localStorage.getItem('token');
-    let userRole = 'STUDENT';
-    try {
-        if (token) {
-            const decoded = jwtDecode(token);
-            userRole = decoded.role || decoded.authorities || 'STUDENT';
-        }
-    } catch (e) {
-        console.error("Could not decode token");
-    }
+    // Get role from localStorage since token is now in HttpOnly cookie
+    const userRole = localStorage.getItem('userRole') || 'STUDENT';
 
-    const handleLogout = () => {
-        localStorage.removeItem("token");
+    const handleLogout = async () => {
+        try {
+            await axios.post("http://localhost:8080/api/auth/logout");
+        } catch (e) {
+            console.error("Logout error", e);
+        }
+        localStorage.removeItem("userRole");
         navigate("/");
     };
 
