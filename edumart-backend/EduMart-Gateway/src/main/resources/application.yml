@@ -24,6 +24,10 @@ spring:
           uri: ${STUDENT_SERVICE_URL:https://edumart-student-service.onrender.com}
           predicates:
             - Path=/api/student/**
+        - id: course-service
+          uri: ${COURSE_SERVICE_URL:lb://course-service}
+          predicates:
+            - Path=/api/courses/**
 
 # Eureka Configuration - Pointing to your Discovery Server
 eureka:

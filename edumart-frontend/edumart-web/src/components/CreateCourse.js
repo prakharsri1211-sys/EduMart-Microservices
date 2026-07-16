@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import { ArrowLeft, Save, Upload, Video, CheckCircle } from 'lucide-react';
 
 const CreateCourse = () => {
@@ -19,8 +20,10 @@ const CreateCourse = () => {
     });
 
     const [showNotification, setShowNotification] = useState(false);
+    const [error, setError] = useState('');
 
     const fileInputRef = React.useRef(null);
+    const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8080";
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -33,18 +36,40 @@ const CreateCourse = () => {
         }
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
-        // Simulate API call
-        setTimeout(() => {
-            setIsLoading(false);
+        setError('');
+        
+        try {
+            // Note: If you implement image upload, you'll need to use FormData here
+            // instead of a direct JSON payload. For now we send the fields.
+            const payload = {
+                title: formData.title,
+                description: formData.description,
+                price: parseFloat(formData.price),
+                category: formData.category,
+                difficulty: formData.difficulty,
+                videoUrl: formData.videoUrl,
+                thumbnailUrl: formData.thumbnail ? formData.thumbnail.name : null
+            };
+
+            await axios.post(`${API_URL}/api/courses`, payload, {
+                headers: { "Content-Type": "application/json" },
+                withCredentials: true // Ensures JWT cookie is sent!
+            });
+
             setShowNotification(true);
             setTimeout(() => {
                 setShowNotification(false);
                 navigate('/courses');
             }, 3000);
-        }, 1500);
+        } catch (err) {
+            console.error(err);
+            setError("Failed to save course. Please try again.");
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -63,15 +88,21 @@ const CreateCourse = () => {
             <div className="flex items-center space-x-4">
                 <button 
                     onClick={() => navigate('/courses')}
-                    className="p-2 rounded-xl bg-edu-light hover:bg-edu-sage text-edu-dark hover:text-white transition-colors"
+                    className="p-2 text-edu-dark/70 hover:bg-edu-light/50 rounded-lg transition-colors"
                 >
-                    <ArrowLeft size={20} />
+                    <ArrowLeft size={24} />
                 </button>
                 <div>
-                    <h1 className="text-3xl font-extrabold text-edu-dark uppercase tracking-tight">Create New Course</h1>
-                    <p className="text-edu-dark/70 mt-1 font-medium">Fill in the details to publish a new course.</p>
+                    <h2 className="text-3xl font-extrabold text-edu-dark tracking-tight uppercase">Create New Course</h2>
+                    <p className="text-edu-dark/70 font-medium">Build your curriculum and share your knowledge</p>
                 </div>
             </div>
+
+            {error && (
+                <div className="p-4 rounded-lg bg-red-50 border border-red-200 text-red-600 text-sm font-medium">
+                    {error}
+                </div>
+            )}
 
             <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Basic Info Section */}
