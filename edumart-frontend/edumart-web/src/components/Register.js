@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
-import { Lock, User, ChevronRight, Eye, EyeOff } from 'lucide-react';
+import { Lock, User, ChevronRight, Eye, EyeOff, ChevronDown } from 'lucide-react';
 import Logo from './Logo';
 
 const Register = () => {
@@ -12,6 +12,7 @@ const Register = () => {
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const navigate = useNavigate();
 
     const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8080";
@@ -104,17 +105,34 @@ const Register = () => {
                         </div>
                     </div>
 
-                    <div className="space-y-2">
+                    <div className="space-y-2 relative">
                         <label className="text-sm font-bold text-edu-dark ml-1">I am a...</label>
-                        <select
-                            value={role}
-                            onChange={(e) => setRole(e.target.value)}
-                            className="block w-full px-4 py-3 bg-edu-cream/50 border border-edu-light rounded-xl focus:ring-2 focus:ring-edu-sage focus:border-transparent text-edu-dark font-medium transition-colors appearance-none"
+                        <div 
+                            className="w-full px-4 py-3 bg-edu-cream/50 border border-edu-light rounded-xl focus-within:ring-2 focus-within:ring-edu-sage text-edu-dark font-medium transition-colors cursor-pointer flex justify-between items-center"
+                            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                         >
-                            <option value="STUDENT">Student</option>
-                            <option value="INSTRUCTOR">Instructor</option>
-                            <option value="ADMIN">Administrator</option>
-                        </select>
+                            <span>
+                                {role === 'STUDENT' ? 'Student' : role === 'INSTRUCTOR' ? 'Instructor' : 'Administrator'}
+                            </span>
+                            <ChevronDown className={`h-5 w-5 text-edu-sage transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
+                        </div>
+                        
+                        {isDropdownOpen && (
+                            <div className="absolute z-10 w-full mt-1 bg-white border border-edu-light rounded-xl shadow-lg overflow-hidden">
+                                {['STUDENT', 'INSTRUCTOR', 'ADMIN'].map((r) => (
+                                    <div
+                                        key={r}
+                                        className="px-4 py-3 hover:bg-edu-mint cursor-pointer text-edu-dark font-medium transition-colors"
+                                        onClick={() => {
+                                            setRole(r);
+                                            setIsDropdownOpen(false);
+                                        }}
+                                    >
+                                        {r === 'STUDENT' ? 'Student' : r === 'INSTRUCTOR' ? 'Instructor' : 'Administrator'}
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
 
                     <button

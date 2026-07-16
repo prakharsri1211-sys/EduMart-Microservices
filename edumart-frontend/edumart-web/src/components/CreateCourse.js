@@ -14,12 +14,21 @@ const CreateCourse = () => {
         price: '',
         category: 'programming',
         difficulty: 'beginner',
-        videoUrl: ''
+        videoUrl: '',
+        thumbnail: null
     });
+
+    const fileInputRef = React.useRef(null);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleFileChange = (e) => {
+        if (e.target.files && e.target.files[0]) {
+            setFormData(prev => ({ ...prev, thumbnail: e.target.files[0] }));
+        }
     };
 
     const handleSubmit = (e) => {
@@ -170,11 +179,23 @@ const CreateCourse = () => {
 
                         <div>
                             <label className="block text-sm font-bold text-edu-dark mb-2">Course Thumbnail</label>
-                            <div className="border-2 border-dashed border-edu-sage rounded-xl p-8 flex flex-col items-center justify-center text-center bg-edu-cream/50 hover:bg-edu-light/30 transition-colors cursor-pointer group">
+                            <input 
+                                type="file" 
+                                ref={fileInputRef} 
+                                onChange={handleFileChange} 
+                                accept="image/jpeg, image/png, image/webp" 
+                                className="hidden" 
+                            />
+                            <div 
+                                onClick={() => fileInputRef.current?.click()}
+                                className="border-2 border-dashed border-edu-sage rounded-xl p-8 flex flex-col items-center justify-center text-center bg-edu-cream/50 hover:bg-edu-light/30 transition-colors cursor-pointer group"
+                            >
                                 <div className="h-12 w-12 rounded-full bg-edu-mint flex items-center justify-center text-edu-dark mb-4 group-hover:scale-110 transition-transform">
                                     <Upload size={24} />
                                 </div>
-                                <span className="text-sm font-bold text-edu-dark mb-1">Click to upload thumbnail</span>
+                                <span className="text-sm font-bold text-edu-dark mb-1">
+                                    {formData.thumbnail ? formData.thumbnail.name : 'Click to upload thumbnail'}
+                                </span>
                                 <span className="text-xs text-edu-dark/60 font-medium">JPG, PNG or WEBP (Max 2MB)</span>
                             </div>
                         </div>
