@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduMart Logo Preview</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-[#F1EFE6] flex items-center justify-center p-8 font-sans">
+    <div class="flex flex-col items-center gap-8">
+        
+        <!-- Logo Badge -->
+        <div class="w-48 h-48 md:w-64 md:h-64 rounded-full bg-[#3D5753] flex items-center justify-center shadow-xl shadow-[#3D5753]/20 relative group cursor-pointer transition-transform hover:scale-105 duration-300">
+          
+          <!-- Subtle inner ring -->
+          <div class="absolute inset-2 md:inset-3 border border-[#7FA79C]/30 rounded-full"></div>
+
+          <!-- Icon SVG -->
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#F1EFE6"
+            stroke-width="1.25"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="w-20 h-20 md:w-28 md:h-28 relative z-10"
+          >
+            <!-- The Book (forming the main basket of the cart) -->
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+            
+            <!-- Handle -->
+            <path d="M20 6h2.5l-1 5" />
+            
+            <!-- Wheels -->
+            <circle cx="9" cy="22" r="1.5" fill="#F1EFE6" stroke="none" />
+            <circle cx="16" cy="22" r="1.5" fill="#F1EFE6" stroke="none" />
+            
+            <!-- Abstract pages/circuit lines inside the book -->
+            <path d="M10 6v5" stroke="#7FA79C" stroke-width="1" />
+            <path d="M14 8v3" stroke="#7FA79C" stroke-width="1" />
+          </svg>
+        </div>
+
+        <!-- Brand Text -->
+        <div class="text-center">
+          <h1 class="text-4xl md:text-5xl font-extrabold tracking-widest text-[#3D5753] uppercase mb-2">
+            EduMart
+          </h1>
+        </div>
+
+      </div>
+</body>
+</html>
