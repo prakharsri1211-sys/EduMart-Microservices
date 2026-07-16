@@ -7,6 +7,13 @@ import axios from 'axios';
 
 axios.defaults.withCredentials = true;
 
+// Prevent scroll wheel from changing number inputs globally
+document.addEventListener("wheel", function(event) {
+  if (document.activeElement.type === "number") {
+      document.activeElement.blur();
+  }
+});
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
