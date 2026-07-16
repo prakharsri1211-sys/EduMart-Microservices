@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { ArrowLeft, Save, Upload, Video, CheckCircle } from 'lucide-react';
+import { ArrowLeft, Save, Upload, Video, CheckCircle, ChevronDown } from 'lucide-react';
 
 const CreateCourse = () => {
     const navigate = useNavigate();
@@ -21,9 +21,29 @@ const CreateCourse = () => {
 
     const [showNotification, setShowNotification] = useState(false);
     const [error, setError] = useState('');
+    
+    // Custom dropdown states
+    const [isCategoryOpen, setIsCategoryOpen] = useState(false);
+    const [isDifficultyOpen, setIsDifficultyOpen] = useState(false);
+    const categoryRef = useRef(null);
+    const difficultyRef = useRef(null);
 
-    const fileInputRef = React.useRef(null);
+    const fileInputRef = useRef(null);
     const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8080";
+
+    // Close dropdowns when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (categoryRef.current && !categoryRef.current.contains(event.target)) {
+                setIsCategoryOpen(false);
+            }
+            if (difficultyRef.current && !difficultyRef.current.contains(event.target)) {
+                setIsDifficultyOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -170,33 +190,70 @@ const CreateCourse = () => {
                             />
                         </div>
 
-                        <div>
+                        <div ref={categoryRef} className="relative">
                             <label className="block text-sm font-bold text-edu-dark mb-2">Category</label>
-                            <select 
-                                name="category"
-                                value={formData.category}
-                                onChange={handleChange}
-                                className="w-full px-4 py-3 rounded-xl bg-edu-cream/50 border border-edu-light text-edu-dark focus:outline-none focus:ring-2 focus:ring-edu-sage focus:border-transparent transition-all font-medium appearance-none"
+                            <div 
+                                className="w-full px-4 py-3 bg-edu-cream/50 border border-edu-light rounded-xl focus-within:ring-2 focus-within:ring-edu-sage text-edu-dark font-medium transition-colors cursor-pointer flex justify-between items-center"
+                                onClick={() => { setIsCategoryOpen(!isCategoryOpen); setIsDifficultyOpen(false); }}
                             >
-                                <option value="programming">Programming & Tech</option>
-                                <option value="design">Design</option>
-                                <option value="business">Business & Marketing</option>
-                                <option value="academic">Academic Subjects</option>
-                            </select>
+                                <span>
+                                    {formData.category === 'programming' ? 'Programming & Tech' :
+                                     formData.category === 'design' ? 'Design' :
+                                     formData.category === 'business' ? 'Business & Marketing' :
+                                     'Academic Subjects'}
+                                </span>
+                                <ChevronDown className={`h-5 w-5 text-edu-sage transition-transform ${isCategoryOpen ? 'rotate-180' : ''}`} />
+                            </div>
+                            
+                            {isCategoryOpen && (
+                                <div className="absolute z-10 w-full mt-2 bg-white border border-edu-light rounded-xl shadow-lg overflow-hidden py-1">
+                                    {[
+                                        { val: 'programming', label: 'Programming & Tech' },
+                                        { val: 'design', label: 'Design' },
+                                        { val: 'business', label: 'Business & Marketing' },
+                                        { val: 'academic', label: 'Academic Subjects' }
+                                    ].map((opt) => (
+                                        <div 
+                                            key={opt.val}
+                                            className="px-4 py-3 hover:bg-edu-cream/50 cursor-pointer text-edu-dark font-medium transition-colors"
+                                            onClick={() => {
+                                                setFormData(prev => ({ ...prev, category: opt.val }));
+                                                setIsCategoryOpen(false);
+                                            }}
+                                        >
+                                            {opt.label}
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
                         </div>
 
-                        <div>
+                        <div ref={difficultyRef} className="relative">
                             <label className="block text-sm font-bold text-edu-dark mb-2">Difficulty</label>
-                            <select 
-                                name="difficulty"
-                                value={formData.difficulty}
-                                onChange={handleChange}
-                                className="w-full px-4 py-3 rounded-xl bg-edu-cream/50 border border-edu-light text-edu-dark focus:outline-none focus:ring-2 focus:ring-edu-sage focus:border-transparent transition-all font-medium appearance-none"
+                            <div 
+                                className="w-full px-4 py-3 bg-edu-cream/50 border border-edu-light rounded-xl focus-within:ring-2 focus-within:ring-edu-sage text-edu-dark font-medium transition-colors cursor-pointer flex justify-between items-center"
+                                onClick={() => { setIsDifficultyOpen(!isDifficultyOpen); setIsCategoryOpen(false); }}
                             >
-                                <option value="beginner">Beginner</option>
-                                <option value="intermediate">Intermediate</option>
-                                <option value="advanced">Advanced</option>
-                            </select>
+                                <span className="capitalize">{formData.difficulty}</span>
+                                <ChevronDown className={`h-5 w-5 text-edu-sage transition-transform ${isDifficultyOpen ? 'rotate-180' : ''}`} />
+                            </div>
+                            
+                            {isDifficultyOpen && (
+                                <div className="absolute z-10 w-full mt-2 bg-white border border-edu-light rounded-xl shadow-lg overflow-hidden py-1">
+                                    {['beginner', 'intermediate', 'advanced'].map((opt) => (
+                                        <div 
+                                            key={opt}
+                                            className="px-4 py-3 hover:bg-edu-cream/50 cursor-pointer text-edu-dark font-medium transition-colors capitalize"
+                                            onClick={() => {
+                                                setFormData(prev => ({ ...prev, difficulty: opt }));
+                                                setIsDifficultyOpen(false);
+                                            }}
+                                        >
+                                            {opt}
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
