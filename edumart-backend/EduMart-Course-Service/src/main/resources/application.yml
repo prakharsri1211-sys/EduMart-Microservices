@@ -8,7 +8,9 @@ spring:
     url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/edumart_course}
     username: ${DATABASE_USERNAME:postgres}
     password: ${DATABASE_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
   jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: update
     show-sql: true
