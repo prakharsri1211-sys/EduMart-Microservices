@@ -35,7 +35,7 @@ const Login = () => {
             navigate("/dashboard"); 
         } catch (err) {
             console.error(err);
-            setError("Login Failed! Please check your credentials or if Auth-Service is running.");
+            setError("Invalid username or password. Please try again.");
         } finally {
             setIsLoading(false);
         }
