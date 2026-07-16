@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Save, Upload, Video } from 'lucide-react';
+import { ArrowLeft, Save, Upload, Video, CheckCircle } from 'lucide-react';
 
 const CreateCourse = () => {
     const navigate = useNavigate();
@@ -18,6 +18,8 @@ const CreateCourse = () => {
         thumbnail: null
     });
 
+    const [showNotification, setShowNotification] = useState(false);
+
     const fileInputRef = React.useRef(null);
 
     const handleChange = (e) => {
@@ -34,16 +36,30 @@ const CreateCourse = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         setIsLoading(true);
-        // Simulate an API call
+        // Simulate API call
         setTimeout(() => {
             setIsLoading(false);
-            alert("Course saved successfully! (Backend integration pending)");
-            navigate('/courses');
+            setShowNotification(true);
+            setTimeout(() => {
+                setShowNotification(false);
+                navigate('/courses');
+            }, 3000);
         }, 1500);
     };
 
     return (
         <div className="max-w-4xl mx-auto space-y-6">
+            {/* Toast Notification */}
+            <div className={`fixed top-4 right-4 z-50 transform transition-all duration-300 ${showNotification ? 'translate-y-0 opacity-100' : '-translate-y-10 opacity-0 pointer-events-none'}`}>
+                <div className="bg-edu-dark text-edu-cream px-6 py-4 rounded-xl shadow-2xl flex items-center gap-3">
+                    <CheckCircle className="text-edu-mint h-6 w-6" />
+                    <div>
+                        <h4 className="font-bold">Success!</h4>
+                        <p className="text-sm text-edu-cream/80">Course saved successfully.</p>
+                    </div>
+                </div>
+            </div>
+
             <div className="flex items-center space-x-4">
                 <button 
                     onClick={() => navigate('/courses')}

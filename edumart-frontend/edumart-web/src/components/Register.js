@@ -7,7 +7,7 @@ import Logo from './Logo';
 const Register = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [role, setRole] = useState('STUDENT');
+    const [role, setRole] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
@@ -111,8 +111,8 @@ const Register = () => {
                             className="w-full px-4 py-3 bg-edu-cream/50 border border-edu-light rounded-xl focus-within:ring-2 focus-within:ring-edu-sage text-edu-dark font-medium transition-colors cursor-pointer flex justify-between items-center"
                             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                         >
-                            <span>
-                                {role === 'STUDENT' ? 'Student' : role === 'INSTRUCTOR' ? 'Instructor' : 'Administrator'}
+                            <span className={!role ? "text-edu-dark/50" : ""}>
+                                {!role ? 'Choose your role...' : role === 'STUDENT' ? 'Student' : role === 'INSTRUCTOR' ? 'Instructor' : 'Administrator'}
                             </span>
                             <ChevronDown className={`h-5 w-5 text-edu-sage transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
                         </div>
@@ -137,7 +137,7 @@ const Register = () => {
 
                     <button
                         type="submit"
-                        disabled={isLoading}
+                        disabled={isLoading || !role}
                         className="w-full flex items-center justify-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-sm font-bold text-edu-cream bg-edu-dark hover:bg-edu-dark/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-edu-dark transition-all disabled:opacity-50 disabled:cursor-not-allowed group uppercase tracking-wider"
                     >
                         {isLoading ? 'Creating account...' : 'Create Account'}
