@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { ArrowLeft, Save, Upload, Video, CheckCircle, ChevronDown } from 'lucide-react';
+import Bootloader from './Bootloader';
 
 const CreateCourse = () => {
     const navigate = useNavigate();
@@ -21,6 +22,7 @@ const CreateCourse = () => {
 
     const [showNotification, setShowNotification] = useState(false);
     const [error, setError] = useState('');
+    const [showBootloader, setShowBootloader] = useState(false);
     
     // Custom dropdown states
     const [isCategoryOpen, setIsCategoryOpen] = useState(false);
@@ -61,6 +63,11 @@ const CreateCourse = () => {
         setIsLoading(true);
         setError('');
         
+        // Show bootloader if taking longer than 1.5 seconds (Render cold start)
+        const bootloaderTimer = setTimeout(() => {
+            setShowBootloader(true);
+        }, 1500);
+
         try {
             // Note: If you implement image upload, you'll need to use FormData here
             // instead of a direct JSON payload. For now we send the fields.
@@ -88,11 +95,15 @@ const CreateCourse = () => {
             console.error(err);
             setError("Failed to save course. Please try again.");
         } finally {
+            clearTimeout(bootloaderTimer);
             setIsLoading(false);
+            setShowBootloader(false);
         }
     };
 
     return (
+        <>
+        {showBootloader && <Bootloader />}
         <div className="max-w-4xl mx-auto space-y-6">
             {/* Toast Notification */}
             <div className={`fixed top-4 right-4 z-50 transform transition-all duration-300 ${showNotification ? 'translate-y-0 opacity-100' : '-translate-y-10 opacity-0 pointer-events-none'}`}>
@@ -322,6 +333,7 @@ const CreateCourse = () => {
                 </div>
             </form>
         </div>
+        </>
     );
 };
 
