@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import { Lock, User, ChevronRight, Eye, EyeOff } from 'lucide-react';
 import Logo from './Logo';
+import Bootloader from './Bootloader';
 
 const Login = () => {
     const [username, setUsername] = useState('');
@@ -10,6 +11,7 @@ const Login = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [showBootloader, setShowBootloader] = useState(false);
     const navigate = useNavigate();
 
     const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8080";
@@ -18,6 +20,11 @@ const Login = () => {
         if (e) e.preventDefault();
         setIsLoading(true);
         setError('');
+        
+        // Show the bootloader if it takes longer than 1.5 seconds
+        const bootloaderTimer = setTimeout(() => {
+            setShowBootloader(true);
+        }, 1500);
         
         try {
             // Talking to API-GATEWAY
@@ -37,11 +44,15 @@ const Login = () => {
             console.error(err);
             setError("Invalid username or password. Please try again.");
         } finally {
+            clearTimeout(bootloaderTimer);
             setIsLoading(false);
+            setShowBootloader(false);
         }
     };
 
     return (
+        <>
+        {showBootloader && <Bootloader />}
         <div className="min-h-screen bg-edu-cream flex items-center justify-center p-4 font-sans">
             <div className="max-w-md w-full bg-white p-8 rounded-2xl shadow-xl shadow-edu-dark/5 border border-edu-light transform transition-all">
                 <div className="text-center mb-8 flex flex-col items-center">
@@ -116,6 +127,7 @@ const Login = () => {
                 </div>
             </div>
         </div>
+        </>
     );
 };
 
