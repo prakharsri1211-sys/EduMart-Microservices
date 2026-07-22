@@ -1,24 +1,34 @@
 import React, { useEffect, useState } from 'react';
-import { BookOpen, Users, TrendingUp, DollarSign } from 'lucide-react';
+import { BookOpen, Users, TrendingUp, DollarSign, Video } from 'lucide-react';
 import axios from 'axios';
 
 const Dashboard = () => {
     const [userRole, setUserRole] = useState('STUDENT');
     const [studentData, setStudentData] = useState(null);
+    const [publishedCoursesCount, setPublishedCoursesCount] = useState(0);
+    const [recentCourses, setRecentCourses] = useState([]);
+
+    const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8080";
 
     useEffect(() => {
         // Read role from localStorage (the actual JWT is in an HttpOnly cookie)
-        const role = localStorage.getItem('userRole');
-        if (role) {
-            setUserRole(role);
-        }
+        const role = localStorage.getItem('userRole') || 'STUDENT';
+        setUserRole(role);
         
-        // Example: Fetching dynamic data from Student Service through Gateway
-        // Cookies are sent automatically because we set withCredentials: true globally
+        // Fetch courses dynamically from Course Service through Gateway
+        axios.get(`${API_URL}/api/courses`, { withCredentials: true })
+            .then(res => {
+                if (Array.isArray(res.data)) {
+                    setPublishedCoursesCount(res.data.length);
+                    setRecentCourses(res.data.slice(-3).reverse());
+                }
+            })
+            .catch(err => console.error("Failed to fetch courses for dashboard", err));
+
         if (role === 'STUDENT') {
-            axios.get("http://localhost:8080/api/student/details")
-            .then(res => setStudentData(res.data))
-            .catch(err => console.error("Failed to fetch student details", err));
+            axios.get(`${API_URL}/api/student/details`, { withCredentials: true })
+                .then(res => setStudentData(res.data))
+                .catch(err => console.error("Failed to fetch student details", err));
         }
     }, []);
 
@@ -49,7 +59,7 @@ const Dashboard = () => {
             {userRole === 'ADMIN' && (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     <StatCard title="Total Students" value="0" icon={Users} />
-                    <StatCard title="Active Courses" value="0" icon={BookOpen} />
+                    <StatCard title="Active Courses" value={publishedCoursesCount} icon={BookOpen} />
                     <StatCard title="Platform Revenue" value="$0" icon={DollarSign} />
                     <StatCard title="Avg Completion" value="0%" icon={TrendingUp} />
                 </div>
@@ -58,7 +68,7 @@ const Dashboard = () => {
             {userRole === 'INSTRUCTOR' && (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <StatCard title="My Students" value="0" icon={Users} />
-                    <StatCard title="Published Courses" value="0" icon={BookOpen} />
+                    <StatCard title="Published Courses" value={publishedCoursesCount} icon={BookOpen} />
                     <StatCard title="Earnings" value="$0" icon={DollarSign} />
                 </div>
             )}
@@ -73,8 +83,24 @@ const Dashboard = () => {
             <div className="mt-8 bg-white rounded-2xl border border-edu-light p-6 shadow-sm">
                 <h2 className="text-lg font-bold text-edu-dark mb-4 uppercase tracking-wider">Recent Activity</h2>
                 <div className="space-y-4">
-                    {/* Placeholder for real data */}
-                    {studentData ? (
+                    {recentCourses.length > 0 ? (
+                        recentCourses.map((course, idx) => (
+                            <div key={idx} className="p-4 rounded-xl bg-edu-cream/50 border border-edu-light flex items-center justify-between">
+                                <div className="flex items-center gap-3">
+                                    <div className="p-2.5 bg-edu-mint rounded-lg text-edu-dark">
+                                        <BookOpen size={20} />
+                                    </div>
+                                    <div>
+                                        <h4 className="font-bold text-edu-dark">{course.title}</h4>
+                                        <p className="text-xs text-edu-dark/60 font-medium">Category: {course.category || 'General'} • Difficulty: {course.difficulty || 'All'}</p>
+                                    </div>
+                                </div>
+                                <span className="text-xs font-bold px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full uppercase tracking-wider">
+                                    Published
+                                </span>
+                            </div>
+                        ))
+                    ) : studentData ? (
                         <div className="p-4 rounded-xl bg-edu-cream/50 border border-edu-light text-edu-dark font-medium">
                             {studentData}
                         </div>
