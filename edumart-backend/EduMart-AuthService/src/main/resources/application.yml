@@ -30,6 +30,7 @@ spring:
 
 eureka:
   client:
+    enabled: false
     fetch-registry: false
     register-with-eureka: false
     service-url:
