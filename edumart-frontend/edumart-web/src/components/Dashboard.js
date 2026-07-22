@@ -8,7 +8,7 @@ const Dashboard = () => {
     const [publishedCoursesCount, setPublishedCoursesCount] = useState(0);
     const [recentCourses, setRecentCourses] = useState([]);
 
-    const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8080";
+    const API_URL = process.env.REACT_APP_API_URL || "https://edumart-gateway.onrender.com";
 
     useEffect(() => {
         // Read role from localStorage (the actual JWT is in an HttpOnly cookie)

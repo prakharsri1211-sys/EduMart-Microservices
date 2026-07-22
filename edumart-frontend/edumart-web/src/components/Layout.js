@@ -22,9 +22,11 @@ const Layout = ({ children }) => {
     // Get role from localStorage since token is now in HttpOnly cookie
     const userRole = localStorage.getItem('userRole') || 'STUDENT';
 
+    const API_URL = process.env.REACT_APP_API_URL || "https://edumart-gateway.onrender.com";
+
     const handleLogout = async () => {
         try {
-            await axios.post("http://localhost:8080/api/auth/logout");
+            await axios.post(`${API_URL}/api/auth/logout`);
         } catch (e) {
             console.error("Logout error", e);
         }

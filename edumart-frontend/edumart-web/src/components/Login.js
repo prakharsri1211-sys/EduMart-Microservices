@@ -14,7 +14,7 @@ const Login = () => {
     const [showBootloader, setShowBootloader] = useState(false);
     const navigate = useNavigate();
 
-    const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8080";
+    const API_URL = process.env.REACT_APP_API_URL || "https://edumart-gateway.onrender.com";
 
     const handleLogin = async (e) => {
         if (e) e.preventDefault();

@@ -9,7 +9,7 @@ const Courses = () => {
     const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
 
-    const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8080";
+    const API_URL = process.env.REACT_APP_API_URL || "https://edumart-gateway.onrender.com";
 
     useEffect(() => {
         const role = localStorage.getItem('userRole') || 'STUDENT';

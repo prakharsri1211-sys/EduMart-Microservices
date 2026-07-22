@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'http://localhost:8080/api',
+    baseURL: (process.env.REACT_APP_API_URL || 'https://edumart-gateway.onrender.com') + '/api',
 });
 
 // Auto-attach JWT token to every request

@@ -15,7 +15,7 @@ const Register = () => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const navigate = useNavigate();
 
-    const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8080";
+    const API_URL = process.env.REACT_APP_API_URL || "https://edumart-gateway.onrender.com";
 
     const handleRegister = async (e) => {
         e.preventDefault();

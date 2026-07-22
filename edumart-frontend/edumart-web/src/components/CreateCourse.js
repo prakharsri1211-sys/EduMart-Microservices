@@ -31,7 +31,7 @@ const CreateCourse = () => {
     const difficultyRef = useRef(null);
 
     const fileInputRef = useRef(null);
-    const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8080";
+    const API_URL = process.env.REACT_APP_API_URL || "https://edumart-gateway.onrender.com";
 
     // Close dropdowns when clicking outside
     useEffect(() => {
