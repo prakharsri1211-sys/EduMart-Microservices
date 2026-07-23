@@ -58,6 +58,20 @@ const CreateCourse = () => {
         }
     };
 
+    const normalizeVideoUrl = (rawUrl) => {
+        if (!rawUrl) return '';
+        let url = rawUrl.trim();
+        if (!url) return '';
+        if (!url.startsWith('http://') && !url.startsWith('https://')) {
+            url = 'https://' + url;
+        }
+        const shortMatch = url.match(/youtu\.be\/([a-zA-Z0-9_-]+)/);
+        if (shortMatch && shortMatch[1]) {
+            return `https://www.youtube.com/watch?v=${shortMatch[1]}`;
+        }
+        return url;
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
@@ -69,15 +83,14 @@ const CreateCourse = () => {
         }, 1500);
 
         try {
-            // Note: If you implement image upload, you'll need to use FormData here
-            // instead of a direct JSON payload. For now we send the fields.
+            const formattedVideoUrl = normalizeVideoUrl(formData.videoUrl);
             const payload = {
                 title: formData.title,
                 description: formData.description,
                 price: parseFloat(formData.price),
                 category: formData.category,
                 difficulty: formData.difficulty,
-                videoUrl: formData.videoUrl,
+                videoUrl: formattedVideoUrl,
                 thumbnailUrl: formData.thumbnail ? formData.thumbnail.name : null
             };
 
@@ -90,7 +103,7 @@ const CreateCourse = () => {
             setTimeout(() => {
                 setShowNotification(false);
                 navigate('/courses');
-            }, 3000);
+            }, 2000);
         } catch (err) {
             console.error(err);
             setError("Failed to save course. Please try again.");
@@ -281,11 +294,11 @@ const CreateCourse = () => {
                                     <Video size={18} />
                                 </div>
                                 <input 
-                                    type="url"
+                                    type="text"
                                     name="videoUrl"
                                     value={formData.videoUrl}
                                     onChange={handleChange}
-                                    placeholder="e.g., https://vimeo.com/your-video-id"
+                                    placeholder="e.g., https://youtu.be/inilpYn_r4g or https://vimeo.com/12345"
                                     className="w-full pl-12 pr-4 py-3 rounded-xl bg-edu-cream/50 border border-edu-light text-edu-dark placeholder-edu-dark/40 focus:outline-none focus:ring-2 focus:ring-edu-sage focus:border-transparent transition-all font-medium"
                                 />
                             </div>

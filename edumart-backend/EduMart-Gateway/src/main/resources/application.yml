@@ -12,11 +12,12 @@ spring:
   application:
     name: api-gateway
   cloud:
+    discovery:
+      enabled: false
     gateway:
-      # Dynamic service discovery allows us to use service names (lb://)
       discovery:
         locator:
-          enabled: true
+          enabled: false
           lower-case-service-id: true
       routes:
         - id: auth-service

@@ -4,10 +4,13 @@ server:
 spring:
   application:
     name: student-service
+  cloud:
+    discovery:
+      enabled: false
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/edumart_student_db}
-    username: ${SPRING_DATASOURCE_USERNAME:postgres}
-    password: ${SPRING_DATASOURCE_PASSWORD:postgres}
+    url: ${SPRING_DATASOURCE_URL:${DATABASE_URL:jdbc:postgresql://localhost:5432/edumart_student_db}}
+    username: ${SPRING_DATASOURCE_USERNAME:${DATABASE_USERNAME:postgres}}
+    password: ${SPRING_DATASOURCE_PASSWORD:${DATABASE_PASSWORD:postgres}}
     driver-class-name: org.postgresql.Driver
     hikari:
       maximum-pool-size: 3
@@ -15,9 +18,9 @@ spring:
       idle-timeout: 30000
       max-lifetime: 60000
       connection-timeout: 10000
-  data:
-    mongodb:
-      uri: ${SPRING_DATA_MONGODB_URI:mongodb://localhost:27017/edumart_student_db}
+      validation-timeout: 3000
+      initialization-fail-timeout: 0
+
   jpa:
     hibernate:
       ddl-auto: update
