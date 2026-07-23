@@ -33,6 +33,11 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
 
+        // Bypass auth for CORS preflight requests (OPTIONS)
+        if (request.getMethod().name().equals("OPTIONS")) {
+            return chain.filter(exchange);
+        }
+
         Predicate<ServerHttpRequest> isApiSecured = r -> openApiEndpoints.stream()
                 .noneMatch(uri -> r.getURI().getPath().contains(uri));
 

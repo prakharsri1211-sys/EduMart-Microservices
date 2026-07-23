@@ -4,11 +4,22 @@ server:
 spring:
   application:
     name: course-service
+  cloud:
+    discovery:
+      enabled: false
   datasource:
-    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/edumart_course}
-    username: ${DATABASE_USERNAME:postgres}
-    password: ${DATABASE_PASSWORD:postgres}
+    url: ${SPRING_DATASOURCE_URL:${DATABASE_URL:jdbc:postgresql://localhost:5432/edumart_course}}
+    username: ${SPRING_DATASOURCE_USERNAME:${DATABASE_USERNAME:postgres}}
+    password: ${SPRING_DATASOURCE_PASSWORD:${DATABASE_PASSWORD:postgres}}
     driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 3
+      minimum-idle: 1
+      idle-timeout: 30000
+      max-lifetime: 60000
+      connection-timeout: 10000
+      validation-timeout: 3000
+      initialization-fail-timeout: 0
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
@@ -20,6 +31,7 @@ spring:
 
 eureka:
   client:
+    enabled: false
     fetch-registry: false
     register-with-eureka: false
     service-url:
